@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Navbar, Nav, Container, Badge, Toast, ToastContainer } from 'react-bootstrap';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
@@ -7,7 +7,25 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('shopCart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+      return [];
+    }
+  });
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('shopCart', JSON.stringify(cartItems));
+    } catch (error) {
+      console.error("Error saving cart to localStorage:", error);
+    }
+  }, [cartItems]);
+  
   const [showToast, setShowToast] = useState(false);
   const [lastAddedItem, setLastAddedItem] = useState(null);
 
@@ -85,7 +103,7 @@ function App() {
               <ProductList addToCart={addToCart} />
             </Col>
             <Col lg={3}>
-              <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
+              <Cart cartItems={cartItems} removeFromCart={removeFromCart} updateQuantity={updateQuantity}/>
             </Col>
           </Row>
         </Container>
