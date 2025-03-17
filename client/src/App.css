@@ -1,52 +1,202 @@
-/* App.css */
+/* App.css - Modernized design */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #2d3748;
+  --accent: #f72585;
+  --light: #f8f9fa;
+  --dark: #1a202c;
+  --gray: #a0aec0;
+  --light-gray: #edf2f7;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
 body {
-  background-color: #f8f9fa;
-  font-family: 'Poppins', sans-serif;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  color: var(--secondary);
 }
 
+/* Navbar Styling */
 .navbar {
-  margin-bottom: 2rem;
+  padding: 1rem 0;
+  background: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
 }
 
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-link {
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cart-badge {
+  background-color: var(--accent) !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 0.35em 0.6em;
+}
+
+/* Header */
+.header-section {
+  padding: 3rem 0 4rem;
+}
+
+.display-title {
+  font-weight: 800;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Product Cards */
 .card {
   border: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .card-img-top {
-  height: 200px;
+  height: 260px;
   object-fit: cover;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border: none;
-  transition: background-color 0.2s;
+.card-body {
+  padding: 1.5rem;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
+.card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.price-tag {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border: none;
+  box-shadow: 0 4px 6px rgba(67, 97, 238, 0.15);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--primary-dark);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--danger);
+  color: white;
+}
+
+/* Cart */
+.cart-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  position: sticky;
+  top: 20px;
+}
+
+.cart-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--light-gray);
 }
 
 .list-group-item {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 8px !important;
+  background-color: var(--light-gray);
   border: none;
-  margin-bottom: 0.5rem;
-  border-radius: 0.5rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.list-group-item:hover {
-  background-color: #f8f9fa;
+.list-group-item:last-child {
+  margin-bottom: 0;
 }
 
-.badge {
+.price-badge {
+  background-color: white !important;
+  color: var(--primary) !important;
+  font-weight: 600;
+  padding: 0.35em 0.65em;
+  border-radius: 6px;
   font-size: 0.9rem;
 }
 
-.display-4 {
-  color: #343a40;
+.cart-total {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Empty State */
+.empty-cart {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--gray);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .display-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .cart-container {
+    margin-top: 2rem;
+    position: static;
+  }
 }
