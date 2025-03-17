@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListGroup, Button, Badge } from 'react-bootstrap';
 
-const Cart = ({ cartItems, removeFromCart, updateQuantity }) => {
+const Cart = ({ cartItems, removeFromCart, updateQuantity, clearCart }) => {
     const totalPrice = cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
   
     return (
@@ -60,6 +60,13 @@ const Cart = ({ cartItems, removeFromCart, updateQuantity }) => {
             <div className="cart-total">
               <span>Total</span>
               <span>${totalPrice.toFixed(2)}</span>
+            <Button 
+              variant="outline-danger" 
+              onClick={clearCart}
+              title="Clear cart"
+            >
+              <i className="bi bi-trash"></i>
+            </Button>
             </div>
             
             <Button variant="primary" className="w-100 mt-3">
