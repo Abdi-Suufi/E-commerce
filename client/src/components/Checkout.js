@@ -8,7 +8,7 @@ const Checkout = ({ cartItems, clearCart }) => {
     email: '',
     address: '',
     city: '',
-    state: '',
+    County: '',
     postcode: '',
     cardName: '',
     cardNumber: '',
@@ -138,17 +138,17 @@ const Checkout = ({ cartItems, clearCart }) => {
                     </Form.Group>
                   </Col>
                   <Col md={4}>
-                    <Form.Group controlId="state">
-                      <Form.Label>State</Form.Label>
+                    <Form.Group controlId="County">
+                      <Form.Label>City</Form.Label>
                       <Form.Control
                         required
                         type="text"
-                        name="state"
-                        value={formData.state}
+                        name="County"
+                        value={formData.County}
                         onChange={handleChange}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please provide your state.
+                        Please provide your County.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
