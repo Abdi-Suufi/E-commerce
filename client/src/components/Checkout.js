@@ -281,18 +281,6 @@ const Checkout = ({ cartItems, clearCart }) => {
               </ListGroup>
             </Card.Body>
           </Card>
-
-          <Card className="mb-4">
-            <Card.Header className="bg-white">
-              <h5 className="mb-0">Need Help?</h5>
-            </Card.Header>
-            <Card.Body>
-              <p className="mb-0">
-                Have questions or need assistance with your order? 
-                <a href="#contact" className="d-block mt-2">Contact our support team</a>
-              </p>
-            </Card.Body>
-          </Card>
         </Col>
       </Row>
     </Container>
