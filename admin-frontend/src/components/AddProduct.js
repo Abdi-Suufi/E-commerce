@@ -7,9 +7,12 @@ const AddProduct = ({ onProductAdded }) => {
   const [showForm, setShowForm] = useState(false);
 
   const handleAddProduct = async (newProduct) => {
-    await axios.post('http://localhost:5000/api/products', newProduct);
-    setShowForm(false);
-    onProductAdded();
+    try {
+      await axios.post(process.env.REACT_APP_API_URL, newProduct);
+      onProductAdded();
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
   };
 
   return (

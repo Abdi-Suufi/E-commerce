@@ -12,13 +12,21 @@ const ProductList = () => {
   }, []);
 
   const fetchProducts = async () => {
-    const response = await axios.get('http://localhost:5000/api/products');
-    setProducts(response.data);
+    try {
+      const response = await axios.get(process.env.REACT_APP_API_URL);
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/products/${id}`);
-    fetchProducts();
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/${id}`);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   };
 
   const handleEdit = (product) => {
@@ -26,9 +34,13 @@ const ProductList = () => {
   };
 
   const handleUpdate = async (updatedProduct) => {
-    await axios.put(`http://localhost:5000/api/products/${updatedProduct.id}`, updatedProduct);
-    setEditingProduct(null);
-    fetchProducts();
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/${updatedProduct.id}`, updatedProduct);
+      setEditingProduct(null);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
   };
 
   return (
@@ -49,7 +61,7 @@ const ProductList = () => {
             <tr key={product.id}>
               <td>{product.id}</td>
               <td>{product.name}</td>
-              <td>${product.price}</td>
+              <td>£{product.price}</td>
               <td>
                 <img src={product.image} alt={product.name} style={{ width: '50px' }} />
               </td>
