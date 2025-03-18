@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react"
 import {
   Row,
   Col,
@@ -116,6 +117,7 @@ function App() {
 
   return (
     <Router>
+      <Analytics />
       <Navbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expand="lg" fixed="top">
         <Container>
           <Navbar.Brand href="/">FashionHub</Navbar.Brand>
