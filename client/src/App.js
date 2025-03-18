@@ -17,6 +17,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Hero from './components/Hero';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -147,12 +148,7 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              <div className="header-section">
-                <h1 className="display-title">Discover Your Style</h1>
-                <p className="text-muted mb-4">
-                  Explore our curated collection of trending fashion items
-                </p>
-              </div>
+              <Hero />
               <Row>
                 <Col lg={9}>
                   <ProductList addToCart={addToCart} />

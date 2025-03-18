@@ -1,0 +1,111 @@
+/* Hero Section Styling */
+.hero-section {
+    /* Background image is now applied via inline style */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 600px;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: white;
+  }
+  
+  /* Fallback background if image fails to load */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #4361ee 0%, #f72585 100%);
+    opacity: 0.9;
+    z-index: -1;
+  }
+  
+  .hero-content {
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .hero-title {
+    font-weight: 800;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #ffffff 0%, #f8f9fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hero-subtitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #f72585;
+  }
+  
+  .hero-description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+  
+  .hero-cta .btn {
+    padding: 0.8rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-feature-image {
+    /* Background image is now applied via inline style */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 450px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .hero-section {
+      height: 500px;
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.4rem;
+    }
+    
+    .hero-description {
+      margin: 0 auto 2rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .hero-section {
+      height: 450px;
+      padding: 2rem 0;
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .hero-cta .btn {
+      padding: 0.6rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  }
