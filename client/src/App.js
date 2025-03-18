@@ -28,6 +28,30 @@ function App() {
     }
   });
 
+  //Dark mode functionality
+  const [darkMode, setDarkMode] = useState(() => {
+    // Check if user has a preference stored
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+
+  // Effect to apply dark mode to the document
+  useEffect(() => {
+    // Save preference to localStorage
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    
+    // Apply or remove dark mode class to body
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => !prevMode);
+  };
+
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     try {
@@ -90,20 +114,26 @@ function App() {
 
   return (
     <Router>
-      <Navbar bg="light" expand="lg" fixed="top">
+      <Navbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expand="lg" fixed="top">
         <Container>
           <Navbar.Brand href="/">FashionHub</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#collections">Collections</Nav.Link>
+              <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="#sales">Sale</Nav.Link>
               <Nav.Link href="#cart" className="d-flex align-items-center">
                 <i className="bi bi-cart3 me-1"></i>
                 Cart
                 {cartItems.length > 0 && (
                   <Badge className="cart-badge ms-2">{cartItems.length}</Badge>
+                )}
+              </Nav.Link>
+              <Nav.Link onClick={toggleDarkMode} className="ms-2">
+                {darkMode ? (
+                  <i className="bi bi-sun-fill"></i>
+                ) : (
+                  <i className="bi bi-moon-fill"></i>
                 )}
               </Nav.Link>
             </Nav>
@@ -172,7 +202,7 @@ function App() {
                 <div>
                   <div className="fw-medium">{lastAddedItem.name}</div>
                   <div className="small text-primary">
-                    ${lastAddedItem.price.toFixed(2)}
+                    £{lastAddedItem.price.toFixed(2)}
                   </div>
                 </div>
               </div>

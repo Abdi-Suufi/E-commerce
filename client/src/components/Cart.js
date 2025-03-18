@@ -32,7 +32,7 @@ const Cart = ({ cartItems, removeFromCart, updateQuantity, clearCart }) => {
                   <div>
                     <div className="fw-medium">{item.name}</div>
                     <Badge className="price-badge mt-1">
-                      ${item.price.toFixed(2)}
+                      £{item.price.toFixed(2)}
                     </Badge>
                   </div>
                   <div className="d-flex align-items-center">
@@ -80,7 +80,7 @@ const Cart = ({ cartItems, removeFromCart, updateQuantity, clearCart }) => {
 
           <div className="cart-total">
             <span>Total</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>£{totalPrice.toFixed(2)}</span>
             <Button
               variant="outline-danger"
               onClick={clearCart}
@@ -90,7 +90,7 @@ const Cart = ({ cartItems, removeFromCart, updateQuantity, clearCart }) => {
             </Button>
           </div>
 
-          <Link to="/checkout" className="btn btn-primary w-100">
+          <Link to="/checkout" className="btn btn-primary w-100 m-10">
             Proceed to Checkout
           </Link>
         </>

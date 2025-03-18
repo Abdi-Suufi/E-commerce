@@ -61,7 +61,7 @@ const ProductList = ({ addToCart }) => {
             <Card.Img variant="top" src={product.image} alt={product.name} />
             <Card.Body>
               <Card.Title>{product.name}</Card.Title>
-              <div className="price-tag">${product.price}</div>
+              <div className="price-tag">£{product.price}</div>
               <p className="text-muted small mb-3">
                 {product.description || "High-quality fashion item perfect for your collection."}
               </p>

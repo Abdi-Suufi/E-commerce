@@ -9,7 +9,7 @@ const Checkout = ({ cartItems, clearCart }) => {
     address: '',
     city: '',
     state: '',
-    zip: '',
+    postcode: '',
     cardName: '',
     cardNumber: '',
     expDate: '',
@@ -153,17 +153,17 @@ const Checkout = ({ cartItems, clearCart }) => {
                     </Form.Group>
                   </Col>
                   <Col md={3}>
-                    <Form.Group controlId="zip">
-                      <Form.Label>Zip</Form.Label>
+                    <Form.Group controlId="postcode">
+                      <Form.Label>postcode</Form.Label>
                       <Form.Control
                         required
                         type="text"
-                        name="zip"
-                        value={formData.zip}
+                        name="postcode"
+                        value={formData.postcode}
                         onChange={handleChange}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please provide your zip code.
+                        Please provide your postcode code.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -259,24 +259,24 @@ const Checkout = ({ cartItems, clearCart }) => {
                       <h6 className="my-0">{item.name}</h6>
                       <small className="text-muted">Quantity: {item.quantity || 1}</small>
                     </div>
-                    <span className="text-muted">${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                    <span className="text-muted">£{(item.price * (item.quantity || 1)).toFixed(2)}</span>
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
                   <span>Subtotal</span>
-                  <strong>${subtotal.toFixed(2)}</strong>
+                  <strong>£{subtotal.toFixed(2)}</strong>
                 </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
                   <span>Shipping</span>
-                  <strong>${shipping.toFixed(2)}</strong>
+                  <strong>£{shipping.toFixed(2)}</strong>
                 </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
                   <span>Tax (7%)</span>
-                  <strong>${tax.toFixed(2)}</strong>
+                  <strong>£{tax.toFixed(2)}</strong>
                 </ListGroup.Item>
                 <ListGroup.Item className="d-flex justify-content-between py-3 border-top">
                   <span className="fw-bold">Total</span>
-                  <strong className="text-primary">${total.toFixed(2)}</strong>
+                  <strong className="text-primary">£{total.toFixed(2)}</strong>
                 </ListGroup.Item>
               </ListGroup>
             </Card.Body>

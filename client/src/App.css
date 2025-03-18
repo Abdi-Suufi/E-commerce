@@ -200,3 +200,118 @@ body {
     position: static;
   }
 }
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Navbar specific styles */
+body.dark-mode .navbar {
+  background-color: #1a1a1a !important;
+}
+
+body.dark-mode .navbar-light .navbar-brand,
+body.dark-mode .navbar-light .navbar-nav .nav-link {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .navbar-light .navbar-toggler {
+  border-color: #3d3d3d;
+  background-color: #2d2d2d;
+}
+
+/* Card elements - for products and cart */
+body.dark-mode .card {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+  color: #e0e0e0;
+}
+
+body.dark-mode .card-header {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+}
+
+body.dark-mode .list-group-item {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+  color: #e0e0e0;
+}
+
+/* Product text */
+body.dark-mode .product-title,
+body.dark-mode .product-price,
+body.dark-mode .product-description,
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6,
+body.dark-mode p {
+  color: #e0e0e0 !important;
+}
+
+/* Shopping cart */
+body.dark-mode .cart-badge {
+  background-color: #007bff !important;
+  color: #ffffff !important;
+}
+
+/* Buttons in dark mode */
+body.dark-mode .btn-primary {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+body.dark-mode .btn-outline-primary {
+  border-color: #0069d9;
+  color: #0069d9;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+  background-color: #0069d9;
+  color: #ffffff;
+}
+
+/* Forms */
+body.dark-mode .form-control {
+  background-color: #3d3d3d;
+  border-color: #4d4d4d;
+  color: #e0e0e0;
+}
+
+/* Additional elements */
+body.dark-mode .bg-white {
+  background-color: #1e1e1e !important;
+}
+
+body.dark-mode .text-muted {
+  color: #a0a0a0 !important;
+}
+
+body.dark-mode .border-top {
+  border-color: #3d3d3d !important;
+}
+
+body.dark-mode .text-dark {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .text-primary {
+  color: #4da3ff !important;
+}
+
+/* Toast notifications */
+body.dark-mode .toast {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+}
+
+body.dark-mode .toast-header {
+  background-color: #1a1a1a !important;
+  color: #e0e0e0;
+  border-color: #3d3d3d !important;
+}
