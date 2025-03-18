@@ -315,3 +315,43 @@ body.dark-mode .toast-header {
   color: #e0e0e0;
   border-color: #3d3d3d !important;
 }
+
+/* Target the ListGroup items in dark mode */
+body.dark-mode .list-group-item {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+/* Target the cart container */
+body.dark-mode .cart-container {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+}
+
+/* Target the empty cart message */
+body.dark-mode .empty-cart {
+  color: #a0a0a0 !important;
+}
+
+/* Make badges visible in dark mode */
+body.dark-mode .price-badge {
+  background-color: #0069d9 !important;
+  color: white !important;
+}
+
+/* Target the quantity controls */
+body.dark-mode .quantity-controls .btn-outline-secondary {
+  color: #e0e0e0 !important;
+  border-color: #4d4d4d !important;
+}
+
+body.dark-mode .quantity-controls .btn-outline-secondary:hover {
+  background-color: #4d4d4d !important;
+}
+
+/* Target the cart total area */
+body.dark-mode .cart-total {
+  color: #e0e0e0 !important;
+  border-color: #3d3d3d !important;
+}

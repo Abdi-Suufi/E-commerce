@@ -122,7 +122,7 @@ function App() {
             <Nav className="ms-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="#sales">Sale</Nav.Link>
-              <Nav.Link href="#cart" className="d-flex align-items-center">
+              <Nav.Link href="/checkout" className="d-flex align-items-center">
                 <i className="bi bi-cart3 me-1"></i>
                 Cart
                 {cartItems.length > 0 && (
