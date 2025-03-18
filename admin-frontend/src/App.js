@@ -1,22 +1,41 @@
 import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Login from './components/Login';
 import ProductList from './components/ProductList';
 import AddProduct from './components/AddProduct';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
-  const [refresh, setRefresh] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleProductAdded = () => {
-    setRefresh(!refresh);
+  const handleLogin = () => {
+    setIsLoggedIn(true);
   };
 
   return (
-    <Container>
-      <h1>Admin Dashboard</h1>
-      <AddProduct onProductAdded={handleProductAdded} />
-      <ProductList />
-    </Container>
+    <Router>
+      <Routes>
+        <Route
+          path="/login"
+          element={isLoggedIn ? <Navigate to="/admin" /> : <Login onLogin={handleLogin} />}
+        />
+        <Route
+          path="/admin"
+          element={
+            isLoggedIn ? (
+              <>
+                <h1>Admin Dashboard</h1>
+                <AddProduct />
+                <ProductList />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route path="/" element={<Navigate to="/login" />} />
+      </Routes>
+    </Router>
   );
 };
 

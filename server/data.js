@@ -34,12 +34,6 @@ const products = [
     "name": "Hats",
     "price": 75,
     "image": "https://img.ltwebstatic.com/images3_pi/2024/07/06/34/1720262539335e46c87e88f38d6145197834a74e65_thumbnail_560x.webp"
-  },
-  {
-    "id": 7,
-    "name": "random product",
-    "price": 12,
-    "image": "https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg"
   }
 ];
 
