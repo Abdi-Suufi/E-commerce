@@ -89,7 +89,7 @@ function App() {
   };
 
   return (
-    <>
+    <Router>
       <Navbar bg="light" expand="lg" fixed="top">
         <Container>
           <Navbar.Brand href="/">FashionHub</Navbar.Brand>
@@ -112,29 +112,35 @@ function App() {
       </Navbar>
 
       <div style={{ paddingTop: "76px" }}>
-        <Container>
-          <div className="header-section">
-            <h1 className="display-title">Discover Your Style</h1>
-            <p className="text-muted mb-4">
-              Explore our curated collection of trending fashion items
-            </p>
-          </div>
-
-          <Row>
-            <Col lg={9}>
-              <ProductList addToCart={addToCart} />
-            </Col>
-            <Col lg={3}>
-              <Cart
-                cartItems={cartItems}
-                removeFromCart={removeFromCart}
-                updateQuantity={updateQuantity}
-                clearCart={clearCart}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Container>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <div className="header-section">
+                <h1 className="display-title">Discover Your Style</h1>
+                <p className="text-muted mb-4">
+                  Explore our curated collection of trending fashion items
+                </p>
+              </div>
+              <Row>
+                <Col lg={9}>
+                  <ProductList addToCart={addToCart} />
+                </Col>
+                <Col lg={3}>
+                  <Cart
+                    cartItems={cartItems}
+                    removeFromCart={removeFromCart}
+                    updateQuantity={updateQuantity}
+                    clearCart={clearCart}
+                  />
+                </Col>
+              </Row>
+            </>
+          } />
+          <Route path="/checkout" element={<Checkout cartItems={cartItems} clearCart={clearCart} />} />
+        </Routes>
+      </Container>
+    </div>
 
       <ToastContainer position="bottom-end" className="p-3">
         <Toast
@@ -218,7 +224,7 @@ function App() {
           </Row>
         </Container>
       </footer>
-    </>
+    </Router>
   );
 }
 
