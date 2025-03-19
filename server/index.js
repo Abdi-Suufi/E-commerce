@@ -39,7 +39,7 @@ app.get('/api/products/:id', (req, res) => {
 
 // Create new product
 app.post('/api/products', (req, res) => {
-  const { name, price, image } = req.body;
+  const { name, price, image, description, isNew } = req.body;
   
   // Validation
   if (!name || !price || !image) {
@@ -55,7 +55,9 @@ app.post('/api/products', (req, res) => {
     id: newId,
     name,
     price: parseFloat(price),
-    image
+    image,
+    description: description || "",
+    isNew: isNew || false
   };
   
   products.push(newProduct);
@@ -71,7 +73,7 @@ app.post('/api/products', (req, res) => {
 // Update product
 app.put('/api/products/:id', (req, res) => {
   const productId = parseInt(req.params.id);
-  const { name, price, image } = req.body;
+  const { name, price, image, description, isNew } = req.body;
   
   // Validation
   if (!name || !price || !image) {
@@ -86,7 +88,9 @@ app.put('/api/products/:id', (req, res) => {
     ...products[productIndex],
     name,
     price: parseFloat(price),
-    image
+    image,
+    description: description || "",
+    isNew: isNew || false
   };
   
   // Save to file
