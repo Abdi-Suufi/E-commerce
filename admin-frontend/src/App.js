@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login';
 import ProductList from './components/ProductList';
-import AddProduct from './components/AddProduct';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,11 +22,10 @@ const App = () => {
           path="/admin"
           element={
             isLoggedIn ? (
-              <>
-                <h1>Admin Dashboard</h1>
-                <AddProduct />
+              <div className="container d-flex flex-column align-items-center">
+                <h1 className="my-4">Admin Dashboard</h1>
                 <ProductList />
-              </>
+              </div>
             ) : (
               <Navigate to="/login" />
             )

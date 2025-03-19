@@ -8,6 +8,14 @@ const ProductList = () => {
   const [error, setError] = useState(null);
   const [editingProductId, setEditingProductId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
+  const [showAddProductCard, setShowAddProductCard] = useState(false);
+  const [newProductData, setNewProductData] = useState({
+    name: '',
+    price: '',
+    image: '',
+    description: '',
+    isNew: false
+  });
 
   useEffect(() => {
     fetchProducts();
@@ -37,8 +45,14 @@ const ProductList = () => {
   };
 
   const handleEdit = (product) => {
+    // Ensure description exists even if it's not in the backend data
+    const productWithDefaults = {
+      ...product,
+      description: product.description || "",
+      isNew: product.isNew || false
+    };
     setEditingProductId(product.id);
-    setEditFormData({...product});
+    setEditFormData(productWithDefaults);
   };
 
   const handleCancelEdit = () => {
@@ -46,30 +60,89 @@ const ProductList = () => {
     setEditFormData({});
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, isNewProduct = false) => {
     const { name, value } = e.target;
-    setEditFormData({
-      ...editFormData,
-      [name]: name === 'price' ? parseFloat(value) : value,
+    const formData = isNewProduct ? newProductData : editFormData;
+    const setFormData = isNewProduct ? setNewProductData : setEditFormData;
+    
+    setFormData({
+      ...formData,
+      [name]: name === 'price' ? (value === '' ? '' : parseFloat(value)) : value,
     });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e, isNewProduct = false) => {
     const { name, checked } = e.target;
-    setEditFormData({
-      ...editFormData,
+    const formData = isNewProduct ? newProductData : editFormData;
+    const setFormData = isNewProduct ? setNewProductData : setEditFormData;
+    
+    setFormData({
+      ...formData,
       [name]: checked,
     });
   };
 
   const handleSaveEdit = async () => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/${editFormData.id}`, editFormData);
+      // Make sure we're sending all fields in the correct format
+      const productToUpdate = {
+        id: editFormData.id,
+        name: editFormData.name,
+        price: parseFloat(editFormData.price),
+        image: editFormData.image,
+        description: editFormData.description || "",
+        isNew: editFormData.isNew || false
+      };
+      
+      await axios.put(`${process.env.REACT_APP_API_URL}/${editFormData.id}`, productToUpdate);
       setEditingProductId(null);
+      setEditFormData({});
       fetchProducts();
     } catch (error) {
       console.error('Error updating product:', error);
       setError('Failed to update product');
+    }
+  };
+
+  const handleAddProductClick = () => {
+    setShowAddProductCard(true);
+  };
+
+  const handleCancelAddProduct = () => {
+    setShowAddProductCard(false);
+    setNewProductData({
+      name: '',
+      price: '',
+      image: '',
+      description: '',
+      isNew: false
+    });
+  };
+
+  const handleSaveNewProduct = async () => {
+    try {
+      // Format the data for the API
+      const productToAdd = {
+        name: newProductData.name,
+        price: parseFloat(newProductData.price),
+        image: newProductData.image || "https://placehold.co/400x300?text=Product+Image",
+        description: newProductData.description || "",
+        isNew: newProductData.isNew || false
+      };
+      
+      await axios.post(process.env.REACT_APP_API_URL, productToAdd);
+      setShowAddProductCard(false);
+      setNewProductData({
+        name: '',
+        price: '',
+        image: '',
+        description: '',
+        isNew: false
+      });
+      fetchProducts();
+    } catch (error) {
+      console.error('Error adding product:', error);
+      setError('Failed to add product');
     }
   };
 
@@ -95,8 +168,108 @@ const ProductList = () => {
 
   return (
     <Container>
-      <h2 className="mb-4">Product List</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Product List</h2>
+        <Button 
+          variant="primary" 
+          onClick={handleAddProductClick}
+          disabled={showAddProductCard}
+        >
+          <i className="bi bi-plus-circle me-2"></i>
+          Add Product
+        </Button>
+      </div>
+      
       <Row className="g-4">
+        {/* Add Product Card */}
+        {showAddProductCard && (
+          <Col lg={4} md={6} className="mb-4">
+            <Card className="h-100 border-primary">
+              <Form.Group className="position-absolute top-0 end-0 m-2">
+                <Form.Check
+                  type="checkbox"
+                  name="isNew"
+                  label="NEW"
+                  checked={newProductData.isNew}
+                  onChange={(e) => handleCheckboxChange(e, true)}
+                />
+              </Form.Group>
+              
+              <Card.Body>
+                <h5 className="mb-3">New Product</h5>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Product Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={newProductData.name}
+                      onChange={(e) => handleInputChange(e, true)}
+                      placeholder="Enter product name"
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-3">
+                    <Form.Label>Price (£)</Form.Label>
+                    <Form.Control
+                      type="number"
+                      step="0.01"
+                      name="price"
+                      value={newProductData.price}
+                      onChange={(e) => handleInputChange(e, true)}
+                      placeholder="0.00"
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-3">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="image"
+                      value={newProductData.image}
+                      onChange={(e) => handleInputChange(e, true)}
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-3">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      name="description"
+                      value={newProductData.description}
+                      onChange={(e) => handleInputChange(e, true)}
+                      placeholder="Product description"
+                    />
+                  </Form.Group>
+                  
+                  <div className="d-flex gap-2">
+                    <Button 
+                      variant="success" 
+                      className="w-100"
+                      onClick={handleSaveNewProduct}
+                      disabled={!newProductData.name || !newProductData.price}
+                    >
+                      <i className="bi bi-check-lg me-2"></i>
+                      Save
+                    </Button>
+                    <Button 
+                      variant="secondary" 
+                      className="w-100"
+                      onClick={handleCancelAddProduct}
+                    >
+                      <i className="bi bi-x-lg me-2"></i>
+                      Cancel
+                    </Button>
+                  </div>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        )}
+        
+        {/* Existing Products */}
         {products.map((product) => (
           <Col key={product.id} lg={4} md={6} className="mb-4">
             <Card className="h-100">
@@ -106,7 +279,7 @@ const ProductList = () => {
                     type="checkbox"
                     name="isNew"
                     label="NEW"
-                    checked={editFormData.isNew}
+                    checked={editFormData.isNew || false}
                     onChange={handleCheckboxChange}
                   />
                 </Form.Group>
