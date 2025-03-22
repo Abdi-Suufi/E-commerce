@@ -1,126 +1,128 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
+const connectDB = require('./db/mongoose');
+const Product = require('./models/Product');
 
 const app = express();
 const PORT = 5000;
 
+// Connect to MongoDB
+connectDB();
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// Get products data
-let products = require('./data');
-
-// Helper function to write products to data.js file
-const saveProductsToFile = () => {
-  try {
-    const dataContent = `const products = ${JSON.stringify(products, null, 2)};\n\nmodule.exports = products;`;
-    fs.writeFileSync(path.join(__dirname, 'data.js'), dataContent);
-    return true;
-  } catch (error) {
-    console.error('Error saving products to file:', error);
-    return false;
-  }
-};
-
 // Get all products
-app.get('/api/products', (req, res) => {
-  res.json(products);
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 // Get product by ID
-app.get('/api/products/:id', (req, res) => {
-  const product = products.find(p => p.id === parseInt(req.params.id));
-  if (!product) return res.status(404).send('Product not found');
-  res.json(product);
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).send('Product not found');
+    res.json(product);
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send('Product not found');
+    }
+    res.status(500).send('Server error');
+  }
 });
 
 // Create new product
-app.post('/api/products', (req, res) => {
-  const { name, price, image, description, isNew } = req.body;
-  
-  // Validation
-  if (!name || !price || !image) {
-    return res.status(400).send('Name, price, and image are required');
-  }
-  
-  // Generate new ID (max ID + 1)
-  const newId = products.length > 0 
-    ? Math.max(...products.map(p => p.id)) + 1 
-    : 1;
-  
-  const newProduct = {
-    id: newId,
-    name,
-    price: parseFloat(price),
-    image,
-    description: description || "",
-    isNew: isNew || false
-  };
-  
-  products.push(newProduct);
-  
-  // Save to file
-  if (saveProductsToFile()) {
-    res.status(201).json(newProduct);
-  } else {
-    res.status(500).send('Error saving product');
+app.post('/api/products', async (req, res) => {
+  try {
+    const { name, price, image, description, isNew } = req.body;
+    
+    // Validation
+    if (!name || !price || !image) {
+      return res.status(400).send('Name, price, and image are required');
+    }
+    
+    const newProduct = new Product({
+      name,
+      price: parseFloat(price),
+      image,
+      description: description || "",
+      isNew: isNew || false
+    });
+    
+    const product = await newProduct.save();
+    res.status(201).json(product);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    res.status(500).send('Server error');
   }
 });
 
 // Update product
-app.put('/api/products/:id', (req, res) => {
-  const productId = parseInt(req.params.id);
-  const { name, price, image, description, isNew } = req.body;
-  
-  // Validation
-  if (!name || !price || !image) {
-    return res.status(400).send('Name, price, and image are required');
-  }
-  
-  const productIndex = products.findIndex(p => p.id === productId);
-  if (productIndex === -1) return res.status(404).send('Product not found');
-  
-  // Update product
-  products[productIndex] = {
-    ...products[productIndex],
-    name,
-    price: parseFloat(price),
-    image,
-    description: description || "",
-    isNew: isNew || false
-  };
-  
-  // Save to file
-  if (saveProductsToFile()) {
-    res.json(products[productIndex]);
-  } else {
-    res.status(500).send('Error updating product');
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const { name, price, image, description, isNew } = req.body;
+    
+    // Validation
+    if (!name || !price || !image) {
+      return res.status(400).send('Name, price, and image are required');
+    }
+    
+    // Build product object
+    const productFields = {
+      name,
+      price: parseFloat(price),
+      image,
+      description: description || "",
+      isNew: isNew || false
+    };
+    
+    let product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).send('Product not found');
+    
+    // Update and return the updated product
+    product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: productFields },
+      { new: true }
+    );
+    
+    res.json(product);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send('Product not found');
+    }
+    res.status(500).send('Server error');
   }
 });
 
 // Delete product
-app.delete('/api/products/:id', (req, res) => {
-  const productId = parseInt(req.params.id);
-  const productIndex = products.findIndex(p => p.id === productId);
-  
-  if (productIndex === -1) return res.status(404).send('Product not found');
-  
-  // Remove product
-  products = products.filter(p => p.id !== productId);
-  
-  // Save to file
-  if (saveProductsToFile()) {
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).send('Product not found');
+    
+    await product.deleteOne();
     res.status(204).send();
-  } else {
-    res.status(500).send('Error deleting product');
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send('Product not found');
+    }
+    res.status(500).send('Server error');
   }
 });
 
 app.get('/', (req, res) => {
-  res.send('Ecommerce Backend is running!');
+  res.send('Ecommerce Backend is running with MongoDB!');
 });
 
 app.listen(PORT, () => {
