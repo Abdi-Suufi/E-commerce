@@ -16,48 +16,6 @@ FashionHub is a modern and user-friendly eCommerce web application built with th
 - **Storage:** AWS S3 for media uploads  
 - **Styling:** Bootstrap & Bootstrap Icons  
 
-## 🏗️ Installation  
-
-### 📌 Prerequisites  
-- Node.js & npm installed  
-- MongoDB (local or cloud)  
-- AWS S3 credentials for image storage  
-
-### ⚙️ Setup  
-1. Clone the repository:  
-   ```sh
-   git clone https://github.com/Abdi-Suufi/E-commerce.git
-   cd e-commerce
-   ```
-
-2. Install dependencies:  
-   ```sh
-   npm install
-   cd client && npm install
-   ```
-
-3. Configure environment variables:  
-   Create a `.env` file in the root directory and add:  
-   ```env
-   AWS_REGION=your-region
-   AWS_ACCESS_KEY_ID=your-access-key
-   AWS_SECRET_ACCESS_KEY=your-secret-key
-   AWS_S3_BUCKET_NAME=your-bucket-name
-   MONGO_URI=your-mongodb-uri
-   PORT=5000
-   ```
-
-4. Start the backend server:  
-   ```sh
-   npm run server
-   ```
-
-5. Start the frontend:  
-   ```sh
-   cd client
-   npm start
-   ```
-
 ## 📡 API Endpoints  
 | Method | Endpoint | Description |  
 |--------|----------|-------------|  
