@@ -1,7 +1,8 @@
 # 🛍️ FashionHub - eCommerce Website
 
 ## 📌 Overview  
-FashionHub is a modern and user-friendly eCommerce web application built with the MERN stack. It enables users to browse products, add items to their cart, and complete purchases seamlessly. The backend integrates AWS S3 for secure image storage, ensuring efficient and scalable media management.  
+**[FashionHub](#)** is a modern and user-friendly eCommerce web application built with the [MERN stack](https://www.mongodb.com/mern-stack). It enables users to browse products, add items to their cart, and complete purchases seamlessly. The backend integrates AWS S3 for secure image storage, ensuring efficient and scalable media management.
+
 ![image](https://github.com/user-attachments/assets/85491ea1-593b-40be-9961-801a23754f79)
 
 ## 🚀 Features  
