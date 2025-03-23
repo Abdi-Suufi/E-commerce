@@ -332,7 +332,7 @@ const ProductList = () => {
                       onChange={(e) => handleFileChange(e, true)}
                     />
                     <Form.Text className="text-muted">
-                      Max file size: 5MB
+                      Max file size: 25MB
                     </Form.Text>
                   </Form.Group>
                   
@@ -472,7 +472,7 @@ const ProductList = () => {
                         onChange={(e) => handleFileChange(e, false)}
                       />
                       <Form.Text className="text-muted">
-                        Max file size: 5MB
+                        Max file size: 25MB
                       </Form.Text>
                     </Form.Group>
                     
