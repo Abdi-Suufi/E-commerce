@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const connectDB = require('./db/mongoose');
 const Product = require('./models/Product');
+const Order = require('./models/Order');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
 const fs = require('fs');
@@ -218,6 +219,135 @@ app.delete('/api/products/:id', async (req, res) => {
     console.error('Error deleting product:', error);
     if (error.kind === 'ObjectId') {
       return res.status(404).send('Product not found');
+    }
+    res.status(500).send('Server error');
+  }
+});
+
+// Create new order
+app.post('/api/orders', async (req, res) => {
+  try {
+    const { customer, items, payment } = req.body;
+    
+    // Detailed validation
+    if (!customer || !items || !payment) {
+      return res.status(400).json({ 
+        message: 'Customer, items, and payment information are required',
+        received: { hasCustomer: !!customer, hasItems: !!items, hasPayment: !!payment }
+      });
+    }
+
+    // Validate customer data
+    const requiredCustomerFields = ['firstName', 'lastName', 'email', 'address', 'city', 'county', 'postcode'];
+    const missingCustomerFields = requiredCustomerFields.filter(field => !customer[field]);
+    if (missingCustomerFields.length > 0) {
+      return res.status(400).json({
+        message: 'Missing required customer fields',
+        missingFields: missingCustomerFields
+      });
+    }
+
+    // Validate items
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        message: 'Order must contain at least one item',
+        received: items
+      });
+    }
+
+    // Validate each item
+    const requiredItemFields = ['productId', 'name', 'price', 'quantity'];
+    const invalidItems = items.filter(item => {
+      return requiredItemFields.some(field => !item[field]) ||
+             typeof item.price !== 'number' ||
+             typeof item.quantity !== 'number';
+    });
+
+    if (invalidItems.length > 0) {
+      return res.status(400).json({
+        message: 'Invalid items in order',
+        invalidItems
+      });
+    }
+
+    // Validate payment
+    const requiredPaymentFields = ['subtotal', 'shipping', 'tax', 'total'];
+    const missingPaymentFields = requiredPaymentFields.filter(field => 
+      typeof payment[field] !== 'number' || isNaN(payment[field])
+    );
+
+    if (missingPaymentFields.length > 0) {
+      return res.status(400).json({
+        message: 'Invalid payment information',
+        missingFields: missingPaymentFields
+      });
+    }
+
+    // Create and save the order
+    const newOrder = new Order({
+      customer,
+      items,
+      payment
+    });
+    
+    const order = await newOrder.save();
+    console.log('Order created successfully:', order._id);
+    res.status(201).json(order);
+  } catch (error) {
+    console.error('Error creating order:', error);
+    res.status(500).json({
+      message: 'Server error while creating order',
+      error: error.message
+    });
+  }
+});
+
+// Get all orders
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Get order by ID
+app.get('/api/orders/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).send('Order not found');
+    res.json(order);
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send('Order not found');
+    }
+    res.status(500).send('Server error');
+  }
+});
+
+// Update order status
+app.patch('/api/orders/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).send('Status is required');
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { $set: { status } },
+      { new: true }
+    );
+
+    if (!order) return res.status(404).send('Order not found');
+    res.json(order);
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).send('Order not found');
     }
     res.status(500).send('Server error');
   }

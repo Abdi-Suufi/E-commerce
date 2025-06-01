@@ -26,7 +26,7 @@ const Checkout = ({ cartItems, clearCart }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     
@@ -36,11 +36,63 @@ const Checkout = ({ cartItems, clearCart }) => {
       return;
     }
 
-    // Here you would typically send the order to your backend
-    alert('Order placed successfully!');
-    clearCart();
-    // Redirect to confirmation page or home page
-    window.location.href = '/';
+    try {
+      // Map cart items to include proper MongoDB ObjectId format
+      const orderItems = cartItems.map(item => ({
+        productId: item._id || item.id, // Use either _id or id
+        name: item.name,
+        price: parseFloat(item.price),
+        quantity: parseInt(item.quantity || 1)
+      }));
+
+      const orderData = {
+        customer: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          address: formData.address,
+          city: formData.city,
+          county: formData.County,
+          postcode: formData.postcode
+        },
+        items: orderItems,
+        payment: {
+          subtotal: parseFloat(subtotal),
+          shipping: parseFloat(shipping),
+          tax: parseFloat(tax),
+          total: parseFloat(total)
+        }
+      };
+
+      console.log('Sending order data:', orderData);
+
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to create order: ${errorData}`);
+      }
+
+      const order = await response.json();
+      
+      // Clear the cart
+      clearCart();
+      
+      // Show success message
+      alert('Order placed successfully! Order ID: ' + order._id);
+      
+      // Redirect to home page
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('There was an error placing your order: ' + error.message);
+    }
   };
 
   const subtotal = cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
@@ -253,8 +305,8 @@ const Checkout = ({ cartItems, clearCart }) => {
             </Card.Header>
             <Card.Body>
               <ListGroup variant="flush">
-                {cartItems.map((item) => (
-                  <ListGroup.Item key={item.id} className="d-flex justify-content-between lh-sm border-0 py-2">
+                {cartItems.map((item, index) => (
+                  <ListGroup.Item key={item._id || item.id || index} className="d-flex justify-content-between lh-sm border-0 py-2">
                     <div>
                       <h6 className="my-0">{item.name}</h6>
                       <small className="text-muted">Quantity: {item.quantity || 1}</small>
