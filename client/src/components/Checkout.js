@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Card, ListGroup, Badge } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Checkout = ({ cartItems, clearCart }) => {
   const [formData, setFormData] = useState({
@@ -100,242 +100,232 @@ const Checkout = ({ cartItems, clearCart }) => {
   const tax = subtotal * 0.07; // 7% tax
   const total = subtotal + shipping + tax;
 
+  if (cartItems.length === 0) {
+    return (
+      <div className="checkout-empty">
+        <div className="checkout-empty-content">
+          <h2>Your cart is empty</h2>
+          <p>Add some products to your cart before checking out.</p>
+          <Link to="/" className="button">Continue Shopping</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Container className="py-5">
-      <h1 className="mb-4">Checkout</h1>
-      
-      <Row>
-        <Col md={8}>
-          <Card className="mb-4">
-            <Card.Header className="bg-white">
-              <h5 className="mb-0">Shipping Information</h5>
-            </Card.Header>
-            <Card.Body>
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="firstName">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your first name.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="lastName">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your last name.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
+    <div className="checkout-container">
+      <div className="checkout-header">
+        <h1>Checkout</h1>
+        <Link to="/" className="back-link">
+          <i className='bx bx-arrow-back'></i> Back to Shopping
+        </Link>
+      </div>
 
-                <Form.Group className="mb-3" controlId="email">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    required
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide a valid email.
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="address">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
-                    required
+      <div className="checkout-content">
+        <div className="checkout-form-section">
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="form-section">
+              <h3>Shipping Information</h3>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="firstName">First Name *</label>
+                  <input
                     type="text"
-                    name="address"
-                    value={formData.address}
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleChange}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide your address.
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Row className="mb-3">
-                  <Col md={5}>
-                    <Form.Group controlId="city">
-                      <Form.Label>City</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your city.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="County">
-                      <Form.Label>City</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="County"
-                        value={formData.County}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your County.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col md={3}>
-                    <Form.Group controlId="postcode">
-                      <Form.Label>postcode</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="postcode"
-                        value={formData.postcode}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your postcode code.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <hr className="my-4" />
-
-                <h5 className="mb-3">Payment Information</h5>
-
-                <Form.Group className="mb-3" controlId="cardName">
-                  <Form.Label>Name on Card</Form.Label>
-                  <Form.Control
                     required
-                    type="text"
-                    name="cardName"
-                    value={formData.cardName}
-                    onChange={handleChange}
+                    className={validated && !formData.firstName ? 'invalid' : ''}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide the name on your card.
-                  </Form.Control.Feedback>
-                  <small className="text-muted">Full name as displayed on card</small>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="cardNumber">
-                  <Form.Label>Credit Card Number</Form.Label>
-                  <Form.Control
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lastName">Last Name *</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
                     required
-                    type="text"
-                    name="cardNumber"
-                    placeholder="XXXX XXXX XXXX XXXX"
-                    value={formData.cardNumber}
-                    onChange={handleChange}
+                    className={validated && !formData.lastName ? 'invalid' : ''}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide your credit card number.
-                  </Form.Control.Feedback>
-                </Form.Group>
+                </div>
+              </div>
 
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="expDate">
-                      <Form.Label>Expiration Date</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="expDate"
-                        placeholder="MM/YY"
-                        value={formData.expDate}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your card's expiration date.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="cvv">
-                      <Form.Label>CVV</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        name="cvv"
-                        placeholder="123"
-                        value={formData.cvv}
-                        onChange={handleChange}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your card's security code.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className={validated && !formData.email ? 'invalid' : ''}
+                />
+              </div>
 
-                <Button variant="primary" type="submit" className="w-100 mt-3">
-                  Place Order
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
+              <div className="form-group">
+                <label htmlFor="address">Address *</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                  className={validated && !formData.address ? 'invalid' : ''}
+                />
+              </div>
 
-        <Col md={4}>
-          <Card className="mb-4">
-            <Card.Header className="bg-white">
-              <h5 className="mb-0">Order Summary</h5>
-            </Card.Header>
-            <Card.Body>
-              <ListGroup variant="flush">
-                {cartItems.map((item, index) => (
-                  <ListGroup.Item key={item._id || item.id || index} className="d-flex justify-content-between lh-sm border-0 py-2">
-                    <div>
-                      <h6 className="my-0">{item.name}</h6>
-                      <small className="text-muted">Quantity: {item.quantity || 1}</small>
-                    </div>
-                    <span className="text-muted">£{(item.price * (item.quantity || 1)).toFixed(2)}</span>
-                  </ListGroup.Item>
-                ))}
-                <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
-                  <span>Subtotal</span>
-                  <strong>£{subtotal.toFixed(2)}</strong>
-                </ListGroup.Item>
-                <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
-                  <span>Shipping</span>
-                  <strong>£{shipping.toFixed(2)}</strong>
-                </ListGroup.Item>
-                <ListGroup.Item className="d-flex justify-content-between py-2 border-0">
-                  <span>Tax (7%)</span>
-                  <strong>£{tax.toFixed(2)}</strong>
-                </ListGroup.Item>
-                <ListGroup.Item className="d-flex justify-content-between py-3 border-top">
-                  <span className="fw-bold">Total</span>
-                  <strong className="text-primary">£{total.toFixed(2)}</strong>
-                </ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="city">City *</label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                    className={validated && !formData.city ? 'invalid' : ''}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="County">County *</label>
+                  <input
+                    type="text"
+                    id="County"
+                    name="County"
+                    value={formData.County}
+                    onChange={handleChange}
+                    required
+                    className={validated && !formData.County ? 'invalid' : ''}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="postcode">Postcode *</label>
+                <input
+                  type="text"
+                  id="postcode"
+                  name="postcode"
+                  value={formData.postcode}
+                  onChange={handleChange}
+                  required
+                  className={validated && !formData.postcode ? 'invalid' : ''}
+                />
+              </div>
+            </div>
+
+            <div className="form-section">
+              <h3>Payment Information</h3>
+              <div className="form-group">
+                <label htmlFor="cardName">Name on Card *</label>
+                <input
+                  type="text"
+                  id="cardName"
+                  name="cardName"
+                  value={formData.cardName}
+                  onChange={handleChange}
+                  required
+                  className={validated && !formData.cardName ? 'invalid' : ''}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="cardNumber">Card Number *</label>
+                <input
+                  type="text"
+                  id="cardNumber"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  onChange={handleChange}
+                  required
+                  placeholder="1234 5678 9012 3456"
+                  className={validated && !formData.cardNumber ? 'invalid' : ''}
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="expDate">Expiry Date *</label>
+                  <input
+                    type="text"
+                    id="expDate"
+                    name="expDate"
+                    value={formData.expDate}
+                    onChange={handleChange}
+                    required
+                    placeholder="MM/YY"
+                    className={validated && !formData.expDate ? 'invalid' : ''}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="cvv">CVV *</label>
+                  <input
+                    type="text"
+                    id="cvv"
+                    name="cvv"
+                    value={formData.cvv}
+                    onChange={handleChange}
+                    required
+                    placeholder="123"
+                    className={validated && !formData.cvv ? 'invalid' : ''}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" className="checkout-submit-btn">
+              Place Order
+            </button>
+          </form>
+        </div>
+
+        <div className="checkout-summary">
+          <h3>Order Summary</h3>
+          <div className="order-items">
+            {cartItems.map((item) => (
+              <div key={item.id} className="order-item">
+                <div className="order-item-image">
+                  <img src={item.image} alt={item.name} />
+                </div>
+                <div className="order-item-details">
+                  <div className="order-item-name">{item.name}</div>
+                  <div className="order-item-price">${item.price}</div>
+                  <div className="order-item-quantity">Qty: {item.quantity || 1}</div>
+                </div>
+                <div className="order-item-total">
+                  ${((item.price * (item.quantity || 1)).toFixed(2))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="order-totals">
+            <div className="total-row">
+              <span>Subtotal:</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="total-row">
+              <span>Shipping:</span>
+              <span>${shipping.toFixed(2)}</span>
+            </div>
+            <div className="total-row">
+              <span>Tax:</span>
+              <span>${tax.toFixed(2)}</span>
+            </div>
+            <div className="total-row total">
+              <span>Total:</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
